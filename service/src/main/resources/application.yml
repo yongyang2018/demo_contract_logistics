@@ -1,0 +1,2 @@
+demo-config:
+  entry-point: 'http://localhost:7010'
