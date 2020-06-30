@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  serve:
+    image: 'platten/alpine-oracle-jre8-docker'
+    container_name: 'contract_demo'
+    volumes:
+      - /Users/mac/Documents/GitHub/contract-demo/service/build/libs:/libs
+      - ../local.yml:/local.yml
+    ports:
+      - '8080:8080'
+    entrypoint: 'java -jar /libs/service-0.0.1-SNAPSHOT.jar --spring.config.location=/local.yml'
+

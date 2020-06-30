@@ -61,6 +61,12 @@ public class ExpressContract implements PreBuiltContract {
                 contractStorage.put(ORDER, RLPCodec.encode(o));
                 break;
             }
+            // 重置
+            case 3:{
+                contractStorage.remove(SENDER);
+                contractStorage.remove(ORDER);
+                break;
+            }
         }
     }
 
