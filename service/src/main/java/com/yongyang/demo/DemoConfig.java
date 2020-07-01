@@ -71,4 +71,6 @@ public class DemoConfig {
     private enum Type {
         REDIRECT, PROXY, RESOURCE
     }
+
+    private String ascPath;
 }

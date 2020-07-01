@@ -1,0 +1,37 @@
+{
+  "name": "assembly-script-template",
+  "version": "1.0.0",
+  "description": "template for writing contract code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "asbuild:json-test": "asc tests/json-test.ts -b build/json-test.wasm -t build/json-test.wat --validate --sourceMap --debug",
+    "asbuild:coin": "asc tests/coin.ts -b build/coin.wasm -t build/coin.wat --validate --sourceMap --debug",
+    "asbuild:decimal": "asc tests/decimal-test.ts -b build/decimal-test.wasm -t build/decimal-test.wat --validate --sourceMap --debug",
+    "asbuild:context-test": "asc tests/context-test.ts -b build/context-test.wasm -t build/context-test.wat --validate --sourceMap --optimize",
+    "asbuild:rlp-test": "asc tests/rlp-test.ts -b build/rlp-test.wasm -t build/rlp-test.wat --validate --sourceMap --optimize",
+    "asbuild:db-test": "asc tests/db-test.ts -b build/db-test.wasm -t build/db-test.wat --validate --sourceMap --optimize",
+    "deploy": "node ./deploy.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrustedDataFramework/assembly-script-template.git"
+  },
+  "author": "Salpadding",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TrustedDataFramework/assembly-script-template/issues"
+  },
+  "homepage": "https://github.com/TrustedDataFramework/assembly-script-template#readme",
+  "devDependencies": {
+    "assemblyscript": "^0.9.2",
+    "axios": "^0.19.2",
+    "commander": "^2.20.0"
+  },
+  "dependencies": {
+    "@assemblyscript/loader": "^0.9.2"
+  }
+}

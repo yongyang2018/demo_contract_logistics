@@ -1,6 +1,7 @@
 package com.yongyang.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yongyang.demo.util.ASCWrapper;
 import com.yongyang.demo.util.Init;
 import org.apache.tika.Tika;
 import org.springframework.boot.SpringApplication;
@@ -44,4 +45,10 @@ public class Start {
         );
     }
 
+    @Bean
+    public ASCWrapper ascWrapper(DemoConfig demoConfig){
+        return (demoConfig.getAscPath() == null || demoConfig.getAscPath().isEmpty()) ?
+                new ASCWrapper() :
+                new ASCWrapper(demoConfig.getAscPath());
+    }
 }
