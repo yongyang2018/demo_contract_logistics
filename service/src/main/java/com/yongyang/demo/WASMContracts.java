@@ -8,5 +8,5 @@ import java.util.HashMap;
 
 @ConfigurationProperties(prefix = "demo-config.wasm-contracts")
 @Component
-public class WasmContracts extends HashMap<String, WASMContract> {
+public class WASMContracts extends HashMap<String, WASMContract> {
 }

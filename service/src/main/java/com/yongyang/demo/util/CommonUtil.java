@@ -24,7 +24,7 @@ public class CommonUtil {
         return m;
     }
 
-    public HexBytes createPayload(String method, byte[] body){
+    public static HexBytes createPayload(String method, byte[] body){
         byte[] bytes = method.getBytes(StandardCharsets.US_ASCII);
         return HexBytes.fromBytes(new byte[]{(byte)bytes.length})
                 .concat(HexBytes.fromBytes(bytes))

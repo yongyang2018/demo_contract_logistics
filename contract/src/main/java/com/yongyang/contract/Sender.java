@@ -27,4 +27,10 @@ public class Sender {
 
     // 简单说明
     private String description;
+
+    // 上链高度
+    private long height;
+
+    // 上链的事务哈希
+    private HexBytes hash;
 }

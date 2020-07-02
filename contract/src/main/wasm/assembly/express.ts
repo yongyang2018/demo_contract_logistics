@@ -92,11 +92,11 @@ class Order {
     }
 
     getEncoded(): Uint8Array {
-        const timestamps = [];
+        const timestamps: Array<Uint8Array> = [];
         for (let i = 0; i < this.timestamps.length; i++) {
             timestamps.push(RLP.encodeU64(this.timestamps[i]));
         }
-        const descriptions = [];
+        const descriptions: Array<Uint8Array> = [];
         for (let i = 0; i < this.descriptions.length; i++) {
             descriptions.push(RLP.encodeString(this.descriptions[i]));
         }
@@ -121,24 +121,55 @@ export function init(): void {
 }
 
 // 显示合约地址，调试用
-export function address() {
+export function address(): void{
     const ctx = Context.contract();
     JSONBuilder.putString("address", Hex.encode(ctx.address));
     Result.write(Uint8Array.wrap(String.UTF8.encode(JSONBuilder.build())));
 }
 
-// 存储寄件人
-export function saveSender(){
+// 存储订单
+export function saveOrder(): void{
     const tx = Context.transaction();
+    const header = Context.header();
+    const args = new Arguments(tx.payload);
+    const o = Order.fromEncoded(args.parameters);
+    o.senderAddress = tx.from;
+    o.height = header.height;
+    o.hash = tx.hash;
+    DB.set(ORDER, o.getEncoded());
+}
+
+// 读取订单
+export function getOrder(): void{
+    if(!DB.has(ORDER)){
+        Result.write(RLPItem.NULL.getEncoded())
+        return;
+    }
+    Result.write(DB.get(ORDER))
+}
+
+// 存储寄件人
+export function saveSender(): void{
+    const tx = Context.transaction();
+    const header = Context.header();
     const args = new Arguments(tx.payload);
     const sender = Sender.fromEncoded(args.parameters);
+    sender.hash = tx.hash;
+    sender.height = header.height;
+    sender.address = tx.from
     DB.set(SENDER, sender.getEncoded());
 }
 
-export function getSender(){
+export function getSender(): void{
     if(!DB.has(SENDER)){
         Result.write(RLPItem.NULL.getEncoded())
         return;
     }
     Result.write(DB.get(SENDER))
+}
+
+
+export function reset(): void{
+    DB.remove(SENDER)
+    DB.remove(ORDER)
 }

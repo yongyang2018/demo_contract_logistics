@@ -81,7 +81,7 @@ export class JSONBuilder {
 
     static build(): string {
         const len = _json_builder_build_len();
-        const ptr = new ArrayBuffer(len);
+        const ptr = new ArrayBuffer(i32(len));
         _json_builder_build(changetype<usize>(ptr));
         return String.UTF8.decode(ptr);
     }

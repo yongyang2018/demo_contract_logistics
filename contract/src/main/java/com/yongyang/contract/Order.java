@@ -12,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
+    // 寄件人在链上的地址
+    private HexBytes senderAddress;
     // 快递单号
     private String id;
-    // 寄件人在链上的地址
-    private HexBytes sender;
     // 寄件人寄件的位置
     private String from;
     // 收件人的位置

@@ -8,12 +8,12 @@ import com.yongyang.contract.Sender;
 import com.yongyang.demo.Constants;
 import com.yongyang.demo.ExpressConfig;
 import com.yongyang.demo.Start;
-import com.yongyang.demo.WasmContracts;
+import com.yongyang.demo.WASMContracts;
 import com.yongyang.demo.type.OrderPost;
 import com.yongyang.demo.type.SenderPost;
 import com.yongyang.demo.util.CommonUtil;
 import com.yongyang.demo.util.HttpUtil;
-import com.yongyang.demo.util.WasmContractsManager;
+import com.yongyang.demo.util.WASMContractsManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,16 +35,17 @@ public class ExpressController {
     private final HttpUtil httpUtil;
     private final ObjectMapper objectMapper;
     private final ExpressConfig expressConfig;
-    private final WasmContractsManager manager;
-    private final WasmContracts wasmContracts;
-    private String contractAddress;
+    private final WASMContractsManager manager;
+    private final WASMContracts wasmContracts;
 
-    @PostMapping
-    public void init(){
-        this.contractAddress = wasmContracts.get("express").getAddress();
+    public String getContractAddress() {
+        String ret = wasmContracts.get("express").getAddress();
+        if (ret == null || ret.isEmpty())
+            throw new RuntimeException("express contract has not deployed yet");
+        return ret;
     }
 
-    private Transaction createCallExpressTransaction(){
+    private Transaction createCallExpressTransaction() {
         return new Transaction(
                 PoAConstants.TRANSACTION_VERSION,
                 Transaction.Type.CONTRACT_CALL.code,
@@ -53,7 +54,7 @@ public class ExpressController {
                 expressConfig.getPublicKey(),
                 0, 0,
                 HexBytes.EMPTY,
-                HexBytes.fromHex(contractAddress),
+                HexBytes.fromHex(getContractAddress()),
                 HexBytes.EMPTY
         );
     }
@@ -84,7 +85,7 @@ public class ExpressController {
 
         String resp = httpUtil.get(
                 Start.JSON_CONTENT_TYPE,
-                Constants.getEntryPoint() + "/rpc/contract/" + contractAddress ,
+                Constants.getEntryPoint() + "/rpc/contract/" + getContractAddress(),
                 CommonUtil.getParameter("getSender")
         );
         resp = httpUtil.parseData(resp, String.class);
@@ -101,11 +102,12 @@ public class ExpressController {
                 senderPost.getName(),
                 senderPost.getId(),
                 senderPost.getPhone(),
-                senderPost.getDescription()
+                senderPost.getDescription(),
+                0, null
         );
 
-        Transaction tx = createTransaction();
-        tx.setPayload(HexBytes.fromHex("00").concat(HexBytes.fromBytes(RLPCodec.encode(sender))));
+        Transaction tx = createCallExpressTransaction();
+        tx.setPayload(CommonUtil.createPayload("saveSender", RLPCodec.encode(sender)));
         sign(tx);
         return httpUtil.sendTransaction(tx);
     }
@@ -115,15 +117,13 @@ public class ExpressController {
     @GetMapping("/order")
     @SneakyThrows
     public Order getOrder() {
-        String resp = httpUtil.post(
+        String resp = httpUtil.get(
                 Start.JSON_CONTENT_TYPE,
-                Constants.getEntryPoint() + "/rpc/contract/" + ExpressContract.CONTRACT_ADDRESS,
-                Collections.emptyMap(),
-                objectMapper.writeValueAsString(
-                        CommonUtil.singletonMap("method", "order")
-                )
+                Constants.getEntryPoint() + "/rpc/contract/" + getContractAddress(),
+                CommonUtil.getParameter("getOrder")
         );
-        return httpUtil.parseData(resp, Order.class);
+        resp = httpUtil.parseData(resp, String.class);
+        return RLPCodec.decode(HexBytes.decode(resp), Order.class);
     }
 
     // 创建物流单
@@ -131,8 +131,8 @@ public class ExpressController {
     @SneakyThrows
     public String createOrder(@RequestBody OrderPost post) {
         Order o = new Order(
+                null,
                 post.getId(),
-                expressConfig.getAddress(),
                 post.getFrom(),
                 post.getTo(),
                 0,
@@ -141,13 +141,13 @@ public class ExpressController {
                 new ArrayList<>()
         );
 
-        Transaction tx = createTransaction();
-        tx.setPayload(HexBytes.fromHex("01").concat(HexBytes.fromBytes(RLPCodec.encode(o))));
+        Transaction tx = createCallExpressTransaction();
+        tx.setPayload(CommonUtil.createPayload("saveOrder", RLPCodec.encode(o)));
         sign(tx);
         return httpUtil.sendTransaction(tx);
     }
 
-    // 创建物流单
+    // 补充物流信息
     @PatchMapping("/order")
     @SneakyThrows
     public String createOrder(@RequestBody String body) {
@@ -161,8 +161,8 @@ public class ExpressController {
     // 重置
     @PostMapping("/reset")
     public String reset() {
-        Transaction tx = createTransaction();
-        tx.setPayload(HexBytes.fromHex("03"));
+        Transaction tx = createCallExpressTransaction();
+        tx.setPayload(CommonUtil.createPayload("reset", new byte[0]));
         sign(tx);
         return httpUtil.sendTransaction(tx);
     }
