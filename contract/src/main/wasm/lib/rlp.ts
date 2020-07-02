@@ -213,6 +213,10 @@ export class RLPItem {
     isNull(): bool{
         return this.data.length == 0;
     }
+
+    getEncoded(): Uint8Array{
+        return encodeBytes(this.data);
+    }
 }
 
 export class RLPList {

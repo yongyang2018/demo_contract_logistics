@@ -8,10 +8,12 @@ import com.yongyang.contract.Sender;
 import com.yongyang.demo.Constants;
 import com.yongyang.demo.ExpressConfig;
 import com.yongyang.demo.Start;
+import com.yongyang.demo.WasmContracts;
 import com.yongyang.demo.type.OrderPost;
 import com.yongyang.demo.type.SenderPost;
 import com.yongyang.demo.util.CommonUtil;
 import com.yongyang.demo.util.HttpUtil;
+import com.yongyang.demo.util.WasmContractsManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +35,30 @@ public class ExpressController {
     private final HttpUtil httpUtil;
     private final ObjectMapper objectMapper;
     private final ExpressConfig expressConfig;
+    private final WasmContractsManager manager;
+    private final WasmContracts wasmContracts;
+    private String contractAddress;
 
-    private Transaction createTransaction(){
+    @PostMapping
+    public void init(){
+        this.contractAddress = wasmContracts.get("express").getAddress();
+    }
+
+    private Transaction createCallExpressTransaction(){
+        return new Transaction(
+                PoAConstants.TRANSACTION_VERSION,
+                Transaction.Type.CONTRACT_CALL.code,
+                System.currentTimeMillis() / 1000,
+                httpUtil.getLatestNonce(expressConfig.getAddress().toHex()) + 1,
+                expressConfig.getPublicKey(),
+                0, 0,
+                HexBytes.EMPTY,
+                HexBytes.fromHex(contractAddress),
+                HexBytes.EMPTY
+        );
+    }
+
+    private Transaction createTransaction() {
         return new Transaction(
                 PoAConstants.TRANSACTION_VERSION,
                 Transaction.Type.CONTRACT_CALL.code,
@@ -48,7 +72,7 @@ public class ExpressController {
         );
     }
 
-    private void sign(Transaction tx){
+    private void sign(Transaction tx) {
         byte[] sig = CryptoContext.sign(expressConfig.getPrivateKey().getBytes(), tx.getSignaturePlain());
         tx.setSignature(HexBytes.fromBytes(sig));
     }
@@ -57,15 +81,14 @@ public class ExpressController {
     @GetMapping("/sender")
     @SneakyThrows
     public Sender getSender() {
-        String resp = httpUtil.post(
+
+        String resp = httpUtil.get(
                 Start.JSON_CONTENT_TYPE,
-                Constants.getEntryPoint() + "/rpc/contract/" + ExpressContract.CONTRACT_ADDRESS,
-                Collections.emptyMap(),
-                objectMapper.writeValueAsString(
-                        CommonUtil.singletonMap("method", "sender")
-                )
+                Constants.getEntryPoint() + "/rpc/contract/" + contractAddress ,
+                CommonUtil.getParameter("getSender")
         );
-        return httpUtil.parseData(resp, Sender.class);
+        resp = httpUtil.parseData(resp, String.class);
+        return RLPCodec.decode(HexBytes.decode(resp), Sender.class);
     }
 
     // 注册寄件人
@@ -137,7 +160,7 @@ public class ExpressController {
 
     // 重置
     @PostMapping("/reset")
-    public String reset(){
+    public String reset() {
         Transaction tx = createTransaction();
         tx.setPayload(HexBytes.fromHex("03"));
         sign(tx);

@@ -90,7 +90,7 @@ export class Arguments{
     }
 }
 
-class RLPListReader{
+export class RLPListReader{
     private index: u32;
     constructor(readonly li: RLPList) {
     }
@@ -121,6 +121,16 @@ class RLPListReader{
         const ret = this.li.getItem(this.index).u64();
         this.index++;
         return ret;
+    }
+
+    string(): string{
+        const ret = this.li.getItem(this.index).string();
+        this.index++;
+        return ret;
+    }
+
+    hasNext(): boolean{
+        return this.index < this.li.length();
     }
 }
 
