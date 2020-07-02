@@ -57,7 +57,7 @@ public class ExpressContract implements PreBuiltContract {
                         RLPCodec.decode(payload.slice(1).getBytes(), OrderPayload.class);
                 Order o = RLPCodec.decode(contractStorage.get(ORDER).get(), Order.class);
                 o.getTimestamps().add(p.getTimestamp());
-                o.getDescription().add(p.getDescription());
+                o.getDescriptions().add(p.getDescription());
                 contractStorage.put(ORDER, RLPCodec.encode(o));
                 break;
             }

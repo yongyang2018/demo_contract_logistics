@@ -137,8 +137,8 @@ public class ExpressController {
                 post.getTo(),
                 0,
                 HexBytes.empty(),
-                new ArrayList<>(),
-                new ArrayList<>()
+                post.getTimestamps(),
+                post.getDescriptions()
         );
 
         Transaction tx = createCallExpressTransaction();
@@ -147,15 +147,38 @@ public class ExpressController {
         return httpUtil.sendTransaction(tx);
     }
 
-    // 补充物流信息
+    // 修改物流单
     @PatchMapping("/order")
     @SneakyThrows
-    public String createOrder(@RequestBody String body) {
-        OrderPayload op = new OrderPayload("id", System.currentTimeMillis() / 1000, body);
-        Transaction tx = createTransaction();
-        tx.setPayload(HexBytes.fromHex("02").concat(HexBytes.fromBytes(RLPCodec.encode(op))));
+    public String patchOrder(@RequestBody OrderPost post) {
+        Order o = new Order(
+                null,
+                post.getId(),
+                post.getFrom(),
+                post.getTo(),
+                0,
+                HexBytes.empty(),
+                post.getTimestamps(),
+                post.getDescriptions()
+        );
+
+        Transaction tx = createCallExpressTransaction();
+        tx.setPayload(CommonUtil.createPayload("modifyOrder", RLPCodec.encode(o)));
         sign(tx);
         return httpUtil.sendTransaction(tx);
+    }
+
+    // 查看第三次上链信息
+    @GetMapping("/order-patch")
+    @SneakyThrows
+    public Order getOrderPatch() {
+        String resp = httpUtil.get(
+                Start.JSON_CONTENT_TYPE,
+                Constants.getEntryPoint() + "/rpc/contract/" + getContractAddress(),
+                CommonUtil.getParameter("getPatch")
+        );
+        resp = httpUtil.parseData(resp, String.class);
+        return RLPCodec.decode(HexBytes.decode(resp), Order.class);
     }
 
     // 重置

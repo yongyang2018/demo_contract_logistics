@@ -2,6 +2,7 @@ import {Arguments, Context, DB, Hex, JSONBuilder, log, Result, RLP, RLPItem, RLP
 
 const SENDER = Uint8Array.wrap(String.UTF8.encode("sender"));
 const ORDER = Uint8Array.wrap(String.UTF8.encode("order"));
+const PATCH = Uint8Array.wrap(String.UTF8.encode("patch"));
 
 // 寄件人
 class Sender {
@@ -172,4 +173,27 @@ export function getSender(): void{
 export function reset(): void{
     DB.remove(SENDER)
     DB.remove(ORDER)
+}
+
+export function getPatch(): void{
+    if(!DB.has(PATCH)){
+        Result.write(RLPItem.NULL.getEncoded())
+        return;
+    }
+    Result.write(DB.get(PATCH))
+}
+
+export function modifyOrder(): void{
+    assert(DB.has(ORDER), 'db has order')
+    const tx = Context.transaction();
+    const height = Context.header().height;
+    const args = new Arguments(tx.payload);
+    const o = Order.fromEncoded(args.parameters);
+    const o0 = Order.fromEncoded(DB.get(ORDER));
+    o0.timestamps = o.timestamps;
+    o0.descriptions = o.descriptions;
+    DB.set(ORDER, o0.getEncoded());
+    o0.hash = tx.hash;
+    o0.height = height;
+    DB.set(PATCH, o0.getEncoded());
 }

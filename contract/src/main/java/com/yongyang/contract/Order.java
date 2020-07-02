@@ -27,5 +27,5 @@ public class Order {
     // 时间戳列表
     private List<Long> timestamps;
     // 时间戳对应描述
-    private List<String> description;
+    private List<String> descriptions;
 }
