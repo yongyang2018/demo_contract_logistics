@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>登记信息成功</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>	
+		<link rel="stylesheet" type="text/css" href="../css/header.css" />
+		<style type="text/css">
+			html,body{
+				height: 100%;
+			}
+			body{
+				background-image: url(../img/home.jpg);
+				background-size: cover;
+			}
+			.success-title{
+				font-size: 24px;
+				margin: 50px 0;
+			}
+			.outer>img{
+				width: 140px;
+				height: 140px;
+			}
+			.val{
+				margin-top: 30px;
+			}
+			.but-confirm{
+				padding: 10px 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="tds-header"></div>
+
+		<div class="wid-1200">
+			<div class="">
+				<div class="outer">
+					
+					<img src="../img/success.png" >
+					<div class="success-title">
+						<div class="">
+							恭喜您信息登记成功！以下是您的上链哈希：
+						</div>
+						<div class="val">
+							（请妥善保管）
+						</div>
+					</div>
+					<div class="text-center">
+						<button class="box-but but-confirm" id="confirm">确认</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$("#tds-header").load("header.html");
+			window.onload = function() {
+					const text = $getUrlParameter('text');
+					const redirect = $getUrlParameter('redirect');
+					document.getElementById("confirm").onclick = function() {
+						window.open(redirect);
+						return true;
+					}
+					$('.val').text(`${text}（请妥善保管）`)
+				}
+		</script>
+	</body>
+</html>

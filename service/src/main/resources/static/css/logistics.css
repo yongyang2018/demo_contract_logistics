@@ -1,0 +1,43 @@
+*{margin: 0;padding: 0;}
+@charset "utf-8";
+body,html{height: 100%;}
+
+body{
+	background-image: url(../img/home.jpg);
+	background-size: cover;
+}
+
+.logistics-title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 50px 0;
+}
+
+.logistics-font {
+	font-size: 30px;
+}
+
+.logistics-mid {
+	height: 2px;
+	width: 200px;
+	background-color: #333333;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.logistics-kv{
+	width: 100%;
+	font-size: 20px;
+	color:#333333;
+	display: flex;
+	flex-direction: column;
+}
+.logistics-item{
+	display: flex;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.logistics-item>span:first-child{
+	margin-left: 50px;
+	width: 270px;
+}

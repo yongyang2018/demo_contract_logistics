@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>查询物流信息</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/header.css" />
+		<link rel="stylesheet" type="text/css" href="../css/select.css"/>
+	</head>
+	<body>
+		<div id="tds-header"></div>
+		
+		<div id="" class="wid-1200">
+			<div class="">
+				<div class="outer">
+					<div class="box-frame">
+						<div class="select-sender-title">
+							查询信息
+						</div>
+						<div class="select-sender-menu">
+							<div class="select-sender-item">1</div>
+							<div class="select-sender-mid"></div>
+							<div class="select-sender-item">2</div>
+							<div class="select-sender-mid"></div>
+							<div class="select-sender-item"style="background-color: #88CDF8;">3</div>
+						</div>
+						<div class="select-sender-kv">
+							<div class="logistics-item">
+								<span>2020-05-18 19:15:32 </span>
+								<span>快递件已到达上海某某某快递站等待发货。</span>
+							</div>
+							<div class="select-sender-info">
+								<span>其他信息期是：</span>
+								<span>快递件已到达上海某某某快递站xxxxxxxxxxxx。</span>
+							</div>
+							<div class="select-sender-info">
+								<span>其他信息：</span>
+								<span>快递件已到达上海某某某快递站xxxxxxxxxxxx。</span>
+							</div>
+							<div class="select-sender-info">
+								<span>其他信息：</span>
+								<span>快递件已到达上海某某某快递站xxxxxxxxxxxx。</span>
+							</div>
+							<div class="select-sender-block"style="margin-top: 40px;">
+								<span>区块高度：</span>
+								<span>6789542</span>
+							</div>
+							<div class="select-sender-block">
+								<span>区块哈希：</span>
+								<span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxc</span>
+							</div>
+							<div class="select-sender-block">
+								<span>事务哈希：</span>
+								<span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxc</span>
+							</div>
+							
+						</div>
+						<div class="text-center">
+							<button class="box-but" id="but-select-site">确认收货</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$("#tds-header").load("header.html");
+			window.onload = function() {
+					document.getElementById("but-select-site").onclick = function() {
+						var url = "/TDS/transport/home.html";
+						window.open(url);
+						return true;
+					}
+				}
+		</script>
+	</body>
+</html>

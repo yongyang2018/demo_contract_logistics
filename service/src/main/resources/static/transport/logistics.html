@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>物流页</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+
+	<link rel="stylesheet" type="text/css" href="../css/header.css" />
+	<link rel="stylesheet" type="text/css" href="../css/logistics.css" />
+	<link rel="stylesheet" type="text/css" href="../css/site.css" />
+
+</head>
+
+<body>
+	<div id="tds-header"></div>
+
+	<div id="" class="wid-1200">
+		<div class="">
+			<div class="outer">
+				<div class="box-frame" >
+					<div class="site-kv" style="font-size: 14px;">
+						<div class="site-item " >
+							<span class="" >代收点上链信息：</span>
+							<span type="text" ></span>
+						</div>
+						<div class="site-item " >
+							<span class="" >区块高度：</span>
+							<span type="text" id="height" style="text-align: left;">262&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						</div>
+						<div class="site-item" >
+							<span class="">区块哈希：</span>
+							<span type="text" id="blockHash"></span>
+						</div>
+						<div class="site-item">
+							<span class="">事务哈希：</span>
+							<span type="text" id="txHash"></span>
+						</div>
+					</div>
+					<div class="site-title">
+						<b>物流信息上链确认</b>
+					</div>
+					<div class="logistics-title" >
+						<div class="logistics-font" id="from"></div>
+						<div class="logistics-mid"></div>
+						<div class="logistics-font" id="to"></div>
+					</div>
+					<div class="logistics-kv">
+						<div class="logistics-item">
+							<span>2020-05-18 19:15:32 </span>
+							<span>快递件已到达上海某某某快递站等待发货。</span>
+						</div>
+					</div>
+					<!-- <input type="text" name="description" /> -->
+					<div class="text-center">
+						<button class="box-but" id="but-logistics">存证上链</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$("#tds-header").load("header.html");
+		window.onload = function () {
+			const timestamps  = ['1589800532', '1589804132', '1589886932']
+			let descriptions = ['', '', '']
+
+			const refresh = () => {
+				$api.getOrder((o, err) => {
+					if (!o || err) {
+						$('#but-logistics').attr('disabled', true)
+						$('#but-logistics').text('请先在代收点上链')
+					} else {
+						$('#but-logistics').attr('disabled', false)
+						$('#but-logistics').text('确认上链')
+						let items = ''
+						$('#from').text(o['from'])
+						$('#to').text(o['to'])
+						$('.logistics-item').remove()
+
+						for (let i = 0; i < timestamps.length; i++) {
+							const des = descriptions[i];
+							items += `
+							<div class="logistics-item">
+								<span>${new Date(timestamps[i] * 1000).$format('yyyy-MM-dd hh:mm:ss')}</span>
+								<span>${des}</span>
+							</div>`
+						}
+						descriptions = [`快递件已到达${o.from}快递站等待发货。`, `快递件已由物流公司签收并发往${o.to}。`, '快递已签收，并由收件人取走']
+						$('.logistics-kv').html(items)
+
+						$('#height').text(o.height)
+						$('#txHash').text(o.transactionHash)
+						$api.getBlockHashByHeight(o.height, (data, err) =>{
+							if(data){
+								$('#blockHash').text(data)
+							}
+						})
+					}
+				})
+			}
+
+			refresh();
+			setInterval(refresh, 1000)
+			$('#but-logistics').on('click', () => {
+				$api.patch('/api/express/order', {timestamps: timestamps, descriptions: descriptions}, (data, err) => {
+					if(err) {
+						console.error(err)
+						return
+					}
+					window.open('./success.html?text=' + data[0] + '&redirect=./addressee.html')
+				})
+			})
+		}
+	</script>
+</body>
+
+</html>

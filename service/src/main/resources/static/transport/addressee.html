@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>收件人</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/addressee.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/header.css" />
+	</head>
+	<body>
+	
+		<div class="addressee-conent">
+			<div class="top_right">
+				<a><img src="../img/set.png"></a>
+			</div>
+					
+			
+			<div class="addressee-item">
+
+				<div class="addressee-title">
+					欢迎使用TDS物流查询网站
+				</div>
+				<div class="addressee-slogan">
+				</div>
+				<div class="addressee-wrap">
+					<input type="text" placeholder="请输入对应的哈希值进行查询" />
+					<div class="addressee-wrap-img" id="addressee-search">
+						<img src="../img/addressee-search.png">
+					</div>
+					<a href="home.html">					<div class="addressee-wrap-img" id="addressee-search">
+						<img src="../img/site.png">
+					</div></a>
+				</div>
+				
+			</div>
+		</div>
+
+
+		<script type="text/javascript">
+			$('.top_logo').on('click', () => {
+				window.open('home.html')
+			})
+			window.onload = function() {
+					document.getElementById("addressee-search").onclick = function() {
+						var url = "select-sender.html";
+						window.open(url);
+						return true;
+					}
+				}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>查询寄件人</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/select.css"/>
+    <style type="text/css">
+        .selected {
+            background-color: #88CDF8
+        }
+    </style>
+</head>
+
+<body>
+<div id="tds-header"></div>
+
+<div id="" class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div class="select-sender-title">
+                    查询信息
+                </div>
+                <div class="select-sender-menu">
+                    <button class="select-sender-item item-1">1</button>
+                    <div class="select-sender-mid"></div>
+                    <button class="select-sender-item item-2">2</button>
+                    <div class="select-sender-mid"></div>
+                    <button class="select-sender-item item-3">3</button>
+                </div>
+                <div class="select-sender-kv">
+                    <div class="select-sender-block" style="margin-top: 40px;">
+                        <span>区块高度：</span>
+                        <span>6789542</span>
+                    </div>
+                    <div class="select-sender-block">
+                        <span>区块哈希：</span>
+                        <span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxcqwqwwqw</span>
+                    </div>
+                    <div class="select-sender-block">
+                        <span>事务哈希：</span>
+                        <span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxc</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#tds-header").load("header.html");
+    window.onload = function () {
+        const infos = []
+
+
+        $api.getSender()
+            .then(sender =>
+                $api.getBlockHashByHeight(sender.height)
+                    .then(h => {
+                        sender.blockHash = h
+                        return sender
+                    }))
+            .then(s => `<div class="logistics-kv">
+							<div class="logistics-item">
+								<span>寄件人上链信息：XXX</span>
+							</div></div>` + `<div class="select-sender-kv">
+						<div class="select-sender-block" style="margin-top: 40px;">
+							<span>区块高度：</span>
+							<span>${s.height}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>事务哈希：</span>
+							<span>${s.hash}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>区块哈希：</span>
+							<span>${s.blockHash}</span>
+						</div>
+						</div>`)
+            .then(z => infos.push(z))
+            .then(() => $api.getOrder())
+            .then(o => $api.getBlockHashByHeight(o.height).then(h => {
+                o.blockHash = h
+                return o
+            }))
+            .then(o => `<div class="logistics-kv">
+							<div class="logistics-item">
+								<span>代收点上链信息：XXX</span>
+							</div></div>` + `<div class="select-sender-kv">
+						<div class="select-sender-block" style="margin-top: 40px;">
+							<span>区块高度：</span>
+							<span>${o.height}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>事务哈希：</span>
+							<span>${o.transactionHash}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>区块哈希：</span>
+							<span>${o.blockHash}/span>
+						</div>
+						</div>`)
+            .then(z => infos.push(z))
+            .then(() => $api.get('/api/express/order-patch'))
+            .then(o => $api.getBlockHashByHeight(o.height).then(h => {
+                o.blockHash = h
+                return o
+            }))
+            .then(o => `<div class="logistics-kv">
+							<div class="logistics-item">
+								<span>物流上链信息：XXX</span>
+							</div></div>` + `<div class="select-sender-kv">
+						<div class="select-sender-block" style="margin-top: 40px;">
+							<span>区块高度：</span>
+							<span>${o.height}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>事务哈希：</span>
+							<span>${o.transactionHash}</span>
+						</div>
+
+						<div class="select-sender-block">
+							<span>区块哈希：</span>
+							<span>${o.blockHash}</span>
+						</div>
+						</div>`)
+            .then(z => infos.push(z))
+            .then(() => $switch(0))
+
+        const $switch = function (i) {
+            $('.select-sender-kv').html(infos[i])
+            $('.select-sender-item').removeClass('selected')
+            $(`.item-${i + 1}`).addClass('selected')
+        }
+
+        $switch(0)
+        for (let i = 1; i <= 3; i++) {
+            $(`.item-${i}`).on('click', () => $switch(i - 1))
+
+        }
+
+        const refresh = () => {
+            $api.getOrder((o, err) => {
+                if (!o || err) {
+                    $('#but-logistics').attr('disabled', true)
+                    $('#but-logistics').text('请先在代收点上链')
+                } else {
+                    $('#from').text(o['from'])
+                    $('#to').text(o['to'])
+                    $('.logistics-item').remove()
+                    let items = '';
+                    for (let i = 0; i < o.timestamps.length; i++) {
+                        const t = new Date(o.timestamps[i] * 1000).Format('yyyy-MM-dd hh:mm:ss')
+                        const des = o.description[i];
+                        items += `
+							<div class="logistics-item">
+								<span>${t}</span>
+								<span>${des}</span>
+							</div>`
+                    }
+
+                    items += `
+						<div class="select-sender-block" style="margin-top: 40px;">
+							<span>区块高度：</span>
+							<span>${o.height}</span>
+						</div>
+						`
+
+                    items += `
+						<div class="select-sender-block" >
+							<span>事务哈希：</span>
+							<span>${o.transactionHash}</span>
+						</div>
+						`
+
+                    $api.post('/api/proxy', {
+                        path: '/rpc/block/' + o.height
+                    }, (data, err) => {
+                        if (err) {
+                            $('.select-sender-kv').html(items)
+                            return
+                        }
+                        if (typeof data === 'string') data = JSON.parse(data)
+                        console.log(data)
+                        items += `
+						<div class="select-sender-block">
+							<span>区块哈希：</span>
+							<span>${data.hash}</span>
+						</div>
+						`
+                        $('.select-sender-kv').html(items)
+
+                    })
+                }
+            })
+        }
+
+        // refresh()
+    }
+</script>
+</body>
+
+</html>

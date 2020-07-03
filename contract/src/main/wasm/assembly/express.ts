@@ -26,6 +26,7 @@ class Sender {
     ) {
     }
 
+    // 从 rlp 解码
     static fromEncoded(data: Uint8Array): Sender {
         const li = RLPList.fromEncoded(data);
         const r = new RLPListReader(li);
@@ -36,6 +37,7 @@ class Sender {
         )
     }
 
+    // rlp 编码
     getEncoded(): Uint8Array {
         const elements = [
             RLP.encodeBytes(this.address),
@@ -73,6 +75,7 @@ class Order {
     ) {
     }
 
+    // 解析 rlp 编码
     static fromEncoded(data: Uint8Array): Order {
         const li = RLPList.fromEncoded(data);
         const r = new RLPListReader(li);
@@ -92,6 +95,7 @@ class Order {
         return ret;
     }
 
+    // rlp 编码
     getEncoded(): Uint8Array {
         const timestamps: Array<Uint8Array> = [];
         for (let i = 0; i < this.timestamps.length; i++) {

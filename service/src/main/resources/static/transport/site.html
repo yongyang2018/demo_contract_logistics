@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>代收点</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/site.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+</head>
+<body>
+<div id="tds-header"></div>
+
+<div id="" class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div>
+                    <div class="site-item">
+                        <span class="">寄件人上链信息：</span>
+                    </div>
+                    <div class="site-item">
+                        <span class="">区块高度：</span>
+                        <span type="text" style="text-align: left;" id="height"></span>
+                    </div>
+                    <div class="site-item">
+                        <span class="">区块哈希：</span>
+                        <span type="text" id="blockHash"></span>
+                    </div>
+                    <div class="site-item">
+                        <span class="">事务哈希：</span>
+                        <span type="text"
+                              id="txHash">15b23452991c4ffc170d5813fd5a6c5c194dd4587e938cb3b30b0b08ef336fb9</span>
+                    </div>
+                </div>
+                <div class="site-title">
+                    <b>代收点上链信息填写</b>
+                </div>
+                <div class="site-kv">
+
+                    <div class="site-item">
+                        <span class="">单号：</span>
+                        <input type="text" name="id"/>
+                    </div>
+                    <div class="site-item">
+                        <span class="">始发地：</span>
+                        <input type="text" name="from"/>
+                    </div>
+                    <div class="site-item">
+                        <span class="">目的地：</span>
+                        <input type="text" name="to"/>
+                    </div>
+                    <div class="error site-item text-center"><span style="width: 100%"></span></div>
+                </div>
+                <div class="text-center">
+                    <button class="box-but" id="but-site">存证上链</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#tds-header").load("header.html");
+    window.onload = function () {
+        const fields = ['id', 'from', 'to']
+        const regs = {
+            'id': [/.+/, '单号不能为空'],
+            'from': [/.+/, '始发地不能为空'],
+            'to': [/.+/, '目的地不能为空']
+        }
+
+        const refreshSender = () => $api.getSender()
+            .then(sender => {
+                if (!sender)
+                    throw new Error('sender not found')
+                $('#height').text(sender.height)
+                $('#txHash').text(sender.hash)
+                return $api.getBlockHashByHeight(sender.height)
+            })
+            .then(h => $('#blockHash').text(h))
+            .catch(() => {
+                $('#but-site').attr('disabled', true)
+                $('#but-site').text('请先完成寄件人存证')
+            })
+
+        const validate = function () {
+            let ret = ''
+            fields.forEach(f => {
+                const r = regs[f]
+                if (!r[0].test($name(f).val().trim())) {
+                    ret += r[1] + '<br>'
+                }
+            })
+            return ret
+        }
+
+        refresh()
+        setInterval(refresh, 1000)
+
+        function refresh() {
+            $api.getOrder((o, err) => {
+                if (!o || err) {
+                    $('#but-site').attr('disabled', false)
+                    $('#but-site').text('存证上链')
+                    return
+                }
+                fields.forEach(el => {
+                    $name(el).val(o[el])
+                })
+                $('#but-site').attr('disabled', true)
+                $('#but-site').text('已完成上链')
+            })
+
+            refreshSender()
+        }
+
+        document.getElementById("but-site").onclick = function () {
+            const errors = validate()
+            if (errors) {
+                $('.error span').html(errors)
+                return
+            }
+            const o = {}
+            fields.forEach(el => {
+                o[el] = $name(el).val().trim()
+            })
+            o.timestamps = []
+            o.descriptions = []
+            $api.post('/api/express/order', o, (data, err) => {
+                if (err) return
+                const hash = data[0]
+                window.open('./success.html?text=' + hash + '&redirect=./logistics.html')
+            })
+        }
+
+
+    }
+</script>
+</body>
+</html>
