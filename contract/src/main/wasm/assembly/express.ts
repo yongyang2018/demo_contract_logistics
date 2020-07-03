@@ -165,6 +165,7 @@ export function saveSender(): void{
     DB.set(SENDER, sender.getEncoded());
 }
 
+// 读取寄件人
 export function getSender(): void{
     if(!DB.has(SENDER)){
         Result.write(RLPItem.NULL.getEncoded())
@@ -174,11 +175,14 @@ export function getSender(): void{
 }
 
 
+// 重置
 export function reset(): void{
     DB.remove(SENDER)
     DB.remove(ORDER)
+    DB.remove(PATCH)
 }
 
+// 获取物流上链信息
 export function getPatch(): void{
     if(!DB.has(PATCH)){
         Result.write(RLPItem.NULL.getEncoded())
@@ -187,6 +191,7 @@ export function getPatch(): void{
     Result.write(DB.get(PATCH))
 }
 
+// 补充物流上链信息
 export function modifyOrder(): void{
     assert(DB.has(ORDER), 'db has order')
     const tx = Context.transaction();
