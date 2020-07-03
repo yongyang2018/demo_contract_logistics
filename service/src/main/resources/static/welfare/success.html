@@ -2,18 +2,20 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>登记信息成功</title>
+		<title>佐证上链成功</title>
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../js/api.js" type="text/javascript" charset="utf-8"></script>	
-		<link rel="stylesheet" type="text/css" href="../css/transport/header.css" />
+		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/welfare/header.css" />
 		<style type="text/css">
 			html,body{
 				height: 100%;
 			}
 			body{
-				background-image: url(../img/home.jpg);
+				background-image: url(../img/welfare-beijing.png);
 				background-size: cover;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
 			}
 			.success-title{
 				font-size: 24px;
@@ -32,7 +34,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="tds-header"></div>
+		<div id="header"></div>
 
 		<div class="wid-1200">
 			<div class="">
@@ -44,7 +46,7 @@
 							恭喜您信息登记成功！以下是您的上链哈希：
 						</div>
 						<div class="val">
-							（请妥善保管）
+							q2e3w2eq3w2e3qe295da6s5da6d5415e1q4w56e4q6w54e6565dasd（请妥善保管）
 						</div>
 					</div>
 					<div class="text-center">
@@ -55,15 +57,13 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-			$("#tds-header").load("header.html");
+			$("#header").load("header.html");
 			window.onload = function() {
-					const text = $getUrlParameter('text');
-					const redirect = $getUrlParameter('redirect');
 					document.getElementById("confirm").onclick = function() {
-						window.open(redirect);
+						var url = "home.html";
+						window.open(url);
 						return true;
 					}
-					$('.val').text(`${text}（请妥善保管）`)
 				}
 		</script>
 	</body>

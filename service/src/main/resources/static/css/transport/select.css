@@ -1,0 +1,72 @@
+*{margin: 0;padding: 0;}
+html,body {
+	height: 100%;
+}
+body{
+	background-image: url(/img/home.jpg);
+	background-size: cover;
+}
+.select-sender-title{
+	font-size: 24px;
+	margin: 50px 0;
+	font-weight: bold;
+}
+.select-sender-menu{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.select-sender-menu .select-sender-item{
+	width: 100px;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	border-radius: 50%;
+	box-shadow: 4px 4px 10px 4px rgba(4,0,0,0.25);
+}
+.select-sender-mid {
+	height: 2px;
+	width: 200px;
+	background-color: #FFFFFF;
+	box-shadow: 0px 4px 10px 3px rgba(4,0,0,0.25);
+}
+.select-sender-kv{
+	width: 100%;
+	font-size: 20px;
+	color:#333333;
+	display: flex;
+	flex-direction: column;
+	margin-top: 40px;
+	font-weight: 400;
+}
+.logistics-item,.select-sender-info{
+	display: flex;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-left: 150px;
+}
+.logistics-item>span:nth-child(2),.select-sender-info>span:nth-child(2){
+	margin-left: 30px;
+}
+.select-sender-block{
+	display: flex;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	padding-left: 150px;
+}
+
+@media screen and (max-width:1300px){
+	.logistics-item,.select-sender-info,.select-sender-block{
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.select-sender-block>span:nth-child(2){
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		display: inline-block;
+	}
+
+}

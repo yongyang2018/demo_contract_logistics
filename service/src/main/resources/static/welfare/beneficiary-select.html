@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>多签管理查询</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/welfare/safe.css"/>
+	</head>
+	<body>
+		<div class="safe-conent">
+			<div class="top_right">
+				<i class="fa fa-cog" style="color: #FFFFFF; font-size: 36px;"></i>
+			</div>
+		
+			<div class="safe-item">
+
+				<div class="safe-title">
+					欢迎使用TDS公益查询网站
+				</div>
+				<div class="safe-slogan">
+					宣传标语宣传标语宣传标语宣传标语宣传标语宣传标语宣传标语宣传标语宣传标。
+				</div>
+				<div class="safe-wrap">
+					<input type="text" placeholder="请输入正确的查询号" id="txt"/>
+					<div class="safe-wrap-img" id="safe-search">
+						<img src="../img/addressee-search.png">
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+
+		<script type="text/javascript">
+			window.onload = function() {
+				document.getElementById("safe-search").onclick = function() {
+					confirm();
+				}
+			}
+			function confirm(){
+				
+				var txt = document.getElementById("txt");//input的id
+				
+				if(txt.value ==""|| txt.value == undefined || txt.value == null){
+					alert("请输入查询号")
+					return;	
+				}
+				window.location.href="select-donors.html";
+			}
+			
+		</script>
+	</body>
+</html>

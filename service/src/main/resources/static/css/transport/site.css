@@ -2,7 +2,7 @@ html,body {
 	height: 100%;
 }
 body{
-	background-image: url(../img/home.jpg);
+	background-image: url(../../img/home.jpg);
 	background-size: cover;
 }
 .site-title{

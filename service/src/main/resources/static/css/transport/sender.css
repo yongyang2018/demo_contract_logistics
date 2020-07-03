@@ -3,7 +3,9 @@
 body,html{height: 100%;}
 
 body{
-	background-image: url(../img/home.jpg);
+	background-image: url(../../img/home.jpg);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 	background-size: cover;
 }
 .sender-title{

@@ -3,66 +3,76 @@ html,body {
 	height: 100%;
 }
 body{
-	background-image: url(../img/home.jpg);
+	background-image: url(../../img/welfare-beijing.png);
 	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
-.select-sender-title{
+.select-welfare-title{
 	font-size: 24px;
 	margin: 50px 0;
 	font-weight: bold;
 }
-.select-sender-menu{
+.select-welfare-menu{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-.select-sender-menu .select-sender-item{
+.select-welfare-menu .select-welfare-item{
 	width: 100px;
 	height: 100px;
 	line-height: 100px;
 	text-align: center;
-	font-size: 24px;
+	font-size: 30px;
 	font-weight: bold;
 	border-radius: 50%;
 	box-shadow: 4px 4px 10px 4px rgba(4,0,0,0.25);
 }
-.select-sender-mid {
+.select-welfare-mid {
 	height: 2px;
 	width: 200px;
 	background-color: #FFFFFF;
 	box-shadow: 0px 4px 10px 3px rgba(4,0,0,0.25);
 }
-.select-sender-kv{
+.select-welfare-kv{
 	width: 100%;
 	font-size: 20px;
-	color:#333333;
+	color:#000000;
 	display: flex;
 	flex-direction: column;
 	margin-top: 40px;
 	font-weight: 400;
 }
-.logistics-item,.select-sender-info{
+.logistics-item,.select-welfare-info{
 	display: flex;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	padding-left: 150px;
+	align-items: center;
 }
-.logistics-item>span:nth-child(2),.select-sender-info>span:nth-child(2){
-	margin-left: 30px;
+.logistics-item>span:nth-child(1){
+	margin-right: 20px;
 }
-.select-sender-block{
+.select-welfare-info>span:nth-child(1){
+	margin-right: 10px;
+}
+.select-welfare-block{
 	display: flex;
 	margin-top: 8px;
 	margin-bottom: 8px;
 	padding-left: 150px;
 }
+.mark{
+	background-color: #867E76;
+	color: #FFFFFF;
+}
 
 @media screen and (max-width:1300px){
-	.logistics-item,.select-sender-info,.select-sender-block{
+	.logistics-item,.select-welfare-info,.select-welfare-block{
 		padding-left: 20px;
 		padding-right: 20px;
 	}
-	.select-sender-block>span:nth-child(2){
+	.select-welfare-block>span:nth-child(2){
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
