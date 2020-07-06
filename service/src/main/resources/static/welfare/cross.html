@@ -1,99 +1,123 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>查询信息</title>
-		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/welfare/header.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/welfare/cross.css"/>
-		<style type="text/css">
+<head>
+    <meta charset="utf-8">
+    <title>查询信息</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/js/api.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/welfare/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/welfare/cross.css"/>
+    <style type="text/css">
 
-		</style>
-	</head>
-	<body>
-		
-		<div id="header"></div>
+    </style>
+</head>
+<body>
 
-		<div id="" class="wid-1200">
-			<div class="">
-				<div class="outer">
-					<div class="box-frame">
-						<div class="select-sender-title">
-							XXXXXXXXXX红十字会机构
-						</div>
-						<div class="select-sender-kv">
-							<div class="select-sender-info">
-								<span>捐赠区块高度：</span>
-								<span>985743591</span>
-							</div>
-							<div class="select-sender-info">
-								<span>捐赠区块哈希：</span>
-								<span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxc</span>
-							</div>
-							<div class="select-sender-info">
-								<span>捐赠事务哈希：</span>
-								<span>weq3595cdas12d6q5we610f2a1ds563665c9as8d8asdasdczxc</span>
-							</div>
-							
+<div id="header"></div>
 
-						</div>
-						<div class="box-donate">
-							<div class="cross-donate donate-info">
-								<span>捐赠信息：</span>
-							</div>
-							<div class="cross-donate">
-								<span>捐赠姓名：</span>
-								<span>张三</span>
-							</div>
-							<div class="cross-donate">
-								<span>捐赠内容：</span>
-								<div class="donated-content">
-									<div class="countersign">
-										1.防毒面具，50个，说明：用于简单医用防护
-									</div>
-									<div class="countersign">
-										2.医用口罩，5000个，说明：用于简单的医用防护
-									</div>
-									<div class="countersign">
-										3.防护服，600个，说明：用于简单的医用防护
-									</div>
-								</div>
-							</div>
-							<div class="cross-donate">
-								<span>捐赠说明：防毒面具50个，按照一名医护人员一个的形式安排分发XXXXXXXXXXXXXXXXXXX医用口罩5000个，按照一名医护人员20个口罩的形式安排分发XXXXXXXXXXXXXX，防护服按照一名医护人员5套的形式安排分发XXXXXXXXXXXXXXXXXXXXXX。</span>
-							</div>
-							<div class="cross-donate">
-								<span>捐赠地址：</span>
-								<span>上海东方明珠塔在上海市浦东新区世纪大道1号</span>
-							</div>
-							<div class="cross-donate">
-								<span>受益人：</span>
-								<span>xxxxxxxx医院全体工作人员</span>
-							</div>
-							<div class="cross-donate">
-								<span>捐赠机构：</span>
-								<span>江苏省常州市XXXXXXXXXXXXXX红十字会机构</span>
-							</div>
-							
-						</div>
-						<div class="text-center">
-							<button class="box-but" id="but-select-sender">存证上链</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript">
-			$("#header").load("header.html");
-			window.onload = function() {
-					document.getElementById("but-select-sender").onclick = function() {
-						var url = "success.html";
-						window.open(url);
-						return true;
-					}
-				}
-		</script>
-	</body>
+<div id="" class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div class="select-sender-title" id="org">
+                </div>
+                <div class="select-sender-kv">
+                    <div class="select-sender-info">
+                        <span>捐赠区块高度：</span>
+                        <span id="height"></span>
+                    </div>
+                    <div class="select-sender-info">
+                        <span>捐赠区块哈希：</span>
+                        <span id="blockHash"></span>
+                    </div>
+                    <div class="select-sender-info">
+                        <span>捐赠事务哈希：</span>
+                        <span id="txHash"></span>
+                    </div>
+
+
+                </div>
+                <div class="box-donate">
+                    <div class="cross-donate donate-info">
+                        <span>捐赠信息：</span>
+                    </div>
+                    <div class="cross-donate">
+                        <span>捐赠姓名：</span>
+                        <span id="name"></span>
+                    </div>
+                    <div class="cross-donate">
+                        <span>捐赠内容：</span>
+                        <div class="donated-content">
+                            <div class="countersign" id="content">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cross-donate">
+                        <span id="confirm-description"></span>
+                    </div>
+                    <div class="cross-donate">
+                        <span>捐赠地址：</span>
+                        <span id="address"></span>
+                    </div>
+                    <div class="cross-donate">
+                        <span>受益人：</span>
+                        <span id="get"></span>
+                    </div>
+                    <div class="cross-donate">
+                        <span>捐赠机构：</span>
+                        <span id="donor"></span>
+                    </div>
+
+                </div>
+                <div class="text-center">
+                    <button class="box-but" id="but-select-sender">存证上链</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#header").load("header.html");
+    window.onload = function () {
+        const bind = document.getElementById("but-select-sender").onclick = function () {
+            $api.post('/api/welfare/confirm', {
+                description: $('#confirm-description').text()
+            })
+                .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/home.html`))
+        }
+
+        const refresh = () => $api.getDonor().then(d => {
+            $('#org').text(d.donor)
+            $('#height').text(d.height)
+            $('#txHash').text(d.hash)
+            $('#name').text(d.name)
+            $('#content').text(`1. ${d.content}，说明：${d.info}`)
+            $('#address').text(d.address)
+            $('#donor').text(d.donor)
+            $('#get').text(d.get)
+            const des = '捐赠说明：' + (d.content === '口罩' ?
+                `医用口罩${d.quantity}个，按照一名医护人员20个口罩的形式安排分发${d.donor}` : `防毒面具${d.content}个，按照一名医护人员一个的形式安排分发${d.donor}`)
+            $('#confirm-description').text(des)
+            return $api.getBlockHashByHeight(d.height)
+        })
+            .then(h => $('#blockHash').text(h))
+            .then(() => $api.get('/api/welfare/confirm'))
+        .then(c => {
+            if(c){
+                $('#but-select-sender').attr('disabled', true)
+                $('#but-select-sender').text('已完成二次确认')
+            }else{
+                $('#but-select-sender').attr('disabled', false)
+                $('#but-select-sender').text('存证上链')
+                bind()
+            }
+        })
+
+        setInterval(refresh, 1000)
+    }
+</script>
+</body>
 </html>

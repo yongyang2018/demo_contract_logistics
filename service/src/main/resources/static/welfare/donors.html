@@ -1,92 +1,113 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>会签合同</title>
-		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/welfare/header.css" />
-		<link rel="stylesheet" type="text/css" href="../css/welfare/donors.css" />
-	</head>
-	<body>
-		<div id="header"></div>
+<head>
+    <meta charset="utf-8">
+    <title>会签合同</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/welfare/header.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/welfare/donors.css"/>
+    <script src="/js/api.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="header"></div>
 
-		<div class="wid-1200">
-			<div class="">
-				<div class="outer">
-					<div class="box-frame">
-						<div class="register-title">
-							请认真填写以下表格内容，以便数据真实可靠
-						</div>
-						<div class="register-kv">
-							<div class="register-item">
-								<span class="">捐赠姓名：</span>
-								<input type="text" id="name" required="required" value=""/>
-							</div>
+<div class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div class="register-title">
+                    请认真填写以下表格内容，以便数据真实可靠
+                </div>
+                <div class="register-kv">
+                    <div class="register-item">
+                        <span class="">捐赠姓名：</span>
+                        <input type="text" id="name" value=""/>
+                    </div>
 
-							<div class="conent-item">
-								<span class="">捐赠内容：</span>
-								<select id="country" name="country">
-								  <option value="australia">请选择</option>
-								  <option value="protective">防毒面具</option>
-								  <option value="Mask">口罩</option>
-								</select>
-								<input type="text" id="quantity" required="required" value="" class="conent-input" placeholder="输入数量"/>
-								<input type="text" id="info" required="required" value="" class="conent-input" placeholder="输入简介信息"/>
-							</div>
-							<div class="register-item">
-								<span class="">捐赠地址：</span>
-								<input type="text" id="address" required="required" value=""/>
-							</div>
-							<div class="register-item">
-								<span class="">受益人：</span>
-								<input type="text" id="get" required="required" value=""/>
-							</div>
-							<div class="register-item">
-								<span class="">捐赠机构：</span>
-								<input type="donor" id="donor" required="required" value=""/>
-							</div>
+                    <div class="conent-item">
+                        <span class="">捐赠内容：</span>
+                        <select id="content" name="content">
+                            <option value="口罩">口罩</option>
+                            <option value="防毒面具">防毒面具</option>
+                        </select>
+                        <input type="text" id="quantity" value="" class="conent-input" placeholder="输入数量"/>
+                        <input type="text" id="info" value="" class="conent-input" placeholder="输入简介信息"/>
+                    </div>
+                    <div class="register-item">
+                        <span class="">捐赠地址：</span>
+                        <input type="text" id="address" required="required" value=""/>
+                    </div>
+                    <div class="register-item">
+                        <span class="">受益人：</span>
+                        <input type="text" id="get" value=""/>
+                    </div>
+                    <div class="register-item">
+                        <span class="">捐赠机构：</span>
+                        <input type="text" id="donor" value=""/>
+                    </div>
 
-						</div>
-						<div class="text-center">
-							<button class="box-but" onclick="confirm()">存证上链</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript">
-			$("#header").load("header.html");
-
-		function confirm(){
-			const fields = ['name', 'info', 'address', 'get', 'donor', 'quantity']
-			const regs = {
-				'name': [/.+/, "请输入捐赠人姓名"],
-				'quantity': [/[0-9]+/, "请输入正确的捐赠数量"],
-				'info': [/.+/, "请输入简介信息"],
-				'address': [/.+/, "请输入捐赠人地址"],
-				'get': [/.+/, '请输入受益人'],
-				'donor':[/.+/, '请输入捐赠机构']
-			}
-
-			let error = false
-			fields.forEach(f => {
-				const val = $('#' + f).val()
-				const validate = regs[f]
-				if(!validate[0].test((val && val.trim()) || '')){
-					alert(validate[1])
-					error = true
-				}
-			})
-			if(error)
-				return
-			window.location.href="success.html";
-		}
+                </div>
+                <div class="text-center">
+                    <button class="box-but" onclick="confirm()">存证上链</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#header").load("header.html");
+    const fields = ['name', 'info', 'address', 'get', 'donor', 'quantity']
 
 
+    const refresh = () => $api.getDonor()
+        .then(d => {
+            fields.forEach(f => {
+                $('#' + f).val(d[f])
+                $('#content').val(d['content'])
+                $('#content').attr('disabled', true)
+            })
+            $('.box-but').attr('disabled', true)
+            $('.box-but').text('已完成存证')
+        })
+        .catch(() => {
+            $('.box-but').attr('disabled', false)
+            $('.box-but').text('存证上链')
+            $('#content').attr('disabled', false)
+        })
+    setInterval(refresh, 1000)
+    function confirm() {
+        const regs = {
+            'name': [/.+/, "请输入捐赠人姓名"],
+            'quantity': [/[0-9]+/, "请输入正确的捐赠数量"],
+            'info': [/.+/, "请输入简介信息"],
+            'address': [/.+/, "请输入捐赠人地址"],
+            'get': [/.+/, '请输入受益人'],
+            'donor': [/.+/, '请输入捐赠机构']
+        }
+        const o = {}
+        let error = false
+        fields.forEach(f => {
+            const val = $('#' + f).val()
+            const validate = regs[f]
+            o[f] = val && val.trim()
+            if (!validate[0].test((val && val.trim()) || '')) {
+                alert(validate[1])
+                error = true
+            }
+        })
+        o.content = $('#content').val();
+        if (error)
+            return
 
-		</script>
 
-	</body>
+        $api.post('/api/welfare/donor', o)
+            .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/home.html`))
+    }
+
+
+</script>
+
+</body>
 </html>

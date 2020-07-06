@@ -22,6 +22,7 @@ Date.prototype.$format = function (fmt) { //author: meizz
     return fmt;
 }
 
+// 根据区块高度获取区块哈希
 window.$api.getBlockHashByHeight = function (height, cb) {
     if (cb) {
         $api.post('/api/proxy', {
@@ -37,10 +38,12 @@ window.$api.getBlockHashByHeight = function (height, cb) {
 }
 
 
+// 读取寄件人
 window.$api.getSender = function (cb) {
     return $api.get('/api/express/sender', cb)
 }
 
+// 读取物流单
 window.$api.getOrder = function (cb) {
     return $api.get('/api/express/order', cb)
 }
@@ -110,3 +113,7 @@ window.$getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+$api.getDonor = function(cb){
+    return $api.get('/api/welfare/donor', cb)
+}

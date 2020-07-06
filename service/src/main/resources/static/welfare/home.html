@@ -5,6 +5,8 @@
 		<title>公益首页</title>
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 		<link rel="stylesheet" type="text/css" href="../css/welfare/home.css" />
+		<script src="/js/jquery.min.js" type="text/javascript"></script>
+		<script src="/js/api.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div class="home-box">
@@ -33,17 +35,27 @@
 			<div class="paompt">
 				<div class="paompt-item">
 					<span>捐赠人分配地址：</span>
-					<span>e3qw2eq6w5e65wq6549289d6562q6w4e9qw5e365qw6e5qw65e6qw5e</span>
+					<span id="address"></span>
 				</div>
 				<div class="paompt-item">
 					<span>红十字会分配地址：</span>
-					<span>e3qw2eq6w5e65wq6549289d6562q6w4e9qw5e365qw6e5qw65e6qw5e</span>
+					<span>5cc87525535e1668599373ad2ac475226beebede</span>
 				</div>
 				<div class="paompt-item">
 					<span>受益人分配地址：</span>
-					<span>e3qw2eq6w5e65wq6549289d6562q6w4e9qw5e365qw6e5qw65e6qw5e</span>
+					<span>5438264bcc5a2a4a237f96fe57a7e0dcfc380ece</span>
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			const refresh = () =>
+			$api.getDonor().then(r => {
+				$('#address').text(r.chainAddress)
+			})
+			.catch(() => {
+				$('#address').text('请在捐赠人处填写相关信息并且上链')
+			})
+			setInterval(refresh, 1000)
+		</script>
 	</body>
 </html>
