@@ -3,14 +3,14 @@ html,body {
 	height: 100%;
 }
 body{
-	background-image: url(../../img/welfare-beijing.png);
+	background-image: url(../../img/financial-beijing.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 }
 .select-welfare-title{
 	font-size: 24px;
-	margin: 50px 0;
+	margin: 40px 0;
 	font-weight: bold;
 }
 .select-welfare-menu{
@@ -63,20 +63,7 @@ body{
 	padding-left: 150px;
 }
 .mark{
-	background-color: #867E76;
+	background-color: #515151;
 	color: #FFFFFF;
 }
 
-@media screen and (max-width:1300px){
-	.logistics-item,.select-welfare-info,.select-welfare-block{
-		padding-left: 20px;
-		padding-right: 20px;
-	}
-	.select-welfare-block>span:nth-child(2){
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		display: inline-block;
-	}
-
-}

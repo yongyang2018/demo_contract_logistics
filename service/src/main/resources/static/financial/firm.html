@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>核心企业</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/financial/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/financial/firm.css"/>
+</head>
+<body>
+<div id="header"></div>
+
+<div id="" class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div class="firm-title">
+                    核心企业确认信息上链
+                </div>
+                <div class="select-firm-title" id="supplierName">
+
+                </div>
+
+
+                <div class="select-firm-kv">
+                    <div class="select-firm-block">
+                        <span>上链时间</span>
+                        <span id="timestamp"></span>
+                    </div>
+                    <div class="select-firm-block">
+                        <span>区块高度</span>
+                        <span id="height"></span>
+                    </div>
+                    <div class="select-firm-block">
+                        <span>区块哈希</span>
+                        <span id="blockHash" style="font-size: .7em; position: relative; top: .3em"></span>
+                    </div>
+                    <div class="select-firm-block">
+                        <span>事务哈希</span>
+                        <span id="hash" style="font-size: .7em; position: relative; top: .3em"></span>
+                    </div>
+
+                    <div class="select-firm-block">
+                        <span>融资金额</span>
+                        <span id="amount"></span>
+                    </div>
+                    <div class="select-firm-block">
+                        <span>合同编号</span>
+                        <span id="number"></span>
+                    </div>
+
+                </div>
+                <div class="text-center">
+                    <button class="box-but" id="but-select-confirm">存证上链</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#header").load("header.html");
+    window.onload = function () {
+        const fields = ['height', 'hash', 'amount', 'number', 'blockHash', 'timestamp', 'supplierName']
+        const refresh = () => $api.get('/api/financial/supplier')
+            .then(s => {
+                s.timestamp = new Date(s.timestamp * 1000).$format('yyyy-MM-dd hh:mm:ss')
+                return $api.getBlockHashByHeight(s.height)
+                    .then(h => {
+                        s.blockHash = h
+                        return s
+                    })
+            })
+            .then(s => {
+                fields.forEach(f => {
+                    $('#'+f).text(s[f])
+                })
+            })
+            .then(() => $api.get('/api/financial/confirm'))
+            .then(() => {
+                $('.box-but').attr('disabled', true)
+                $('.box-but').text('企业已确认')
+            })
+            .catch(() => {
+                $('.box-but').attr('disabled', false)
+                $('.box-but').text('存证上链')
+            })
+
+        refresh();
+        setInterval(refresh, 1000)
+        $('.box-but').on('click', () => {
+            $api.post('/api/financial/confirm', {})
+                .then(h => {
+                    const hash = h[0]
+                    window.open(`success.html?text=${hash}&redirect=/financial/select.html`)
+                })
+        })
+    }
+</script>
+</body>
+</html>

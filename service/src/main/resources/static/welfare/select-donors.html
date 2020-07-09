@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>查询寄件人</title>
+    <title>查询信息-红十字会</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
     <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/api.js" type="text/javascript" charset="utf-8"></script>
@@ -19,7 +19,7 @@
         <div class="outer">
             <div class="box-frame">
                 <div class="select-welfare-title">
-                    查询信息
+                    公益信息查询
                 </div>
                 <div class="select-welfare-menu">
                     <div class="select-welfare-item mark item-0">1</div>
@@ -75,22 +75,45 @@
                         return d
                     })
             })
-            .then(d => `<div class="logistics-item">
-						<span>${new Date(d.timestamp * 1000).$format('yyyy-MM-dd hh:mm:ss')}</span>
-				<span>捐赠人${d.name}登记捐赠信息。</span>
-				</div>
-				<div class="select-welfare-block"style="margin-top: 40px;">
-						<span>区块高度：</span>
-				<span>${d.height}</span>
-				</div>
-				<div class="select-welfare-block">
-						<span>区块哈希：</span>
-				<span>${d.blockHash}</span>
-				</div>
-				<div class="select-welfare-block">
-						<span>事务哈希：</span>
-				<span>${d.hash}</span>
-				</div>`)
+            .then(d => {
+                const v = `
+                <div class="logistics-item">
+                    <span class="font-6">捐赠人上链信息：</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠姓名：</span>
+                <span>${d.name}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠内容：</span>
+                <span>${d.content}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠地址：</span>
+                <span>${d.address}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>受益人：</span>
+                <span>${d.get}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠机构：</span>
+                <span>${d.donor}</span>
+                </div>
+                <div class="select-welfare-block"style="margin-top: 40px;">
+                    <span>区块高度：</span>
+                <span>${d.height}</span>
+                </div>
+                <div class="select-welfare-block">
+                    <span>区块哈希：</span>
+                <span>${d.blockHash}</span>
+                </div>
+                <div class="select-welfare-block">
+                    <span>事务哈希：</span>
+                <span>${d.hash}</span>
+                </div>`
+                return v
+            })
             .then(t => infos.push(t))
             .then(() => $api.get('/api/welfare/confirm'))
             .then(c => {
@@ -100,28 +123,60 @@
                     return c
                 })
             })
-            .then(d => `<div class="logistics-item">
-						<span>${new Date(d.timestamp * 1000).$format('yyyy-MM-dd hh:mm:ss')}</span>
-				<span>${context.donor.donor}二次确认并上链登记信息。</span>
-				</div>
-				<div class="select-welfare-block"style="margin-top: 40px;">
-						<span>区块高度：</span>
-				<span>${d.height}</span>
-				</div>
-				<div class="select-welfare-block">
-						<span>区块哈希：</span>
-				<span>${d.blockHash}</span>
-				</div>
-				<div class="select-welfare-block">
-						<span>事务哈希：</span>
-				<span>${d.hash}</span>
-				</div>`)
+            .then(c =>{
+                const d = context.donor
+                return `<div class="logistics-item">
+                    <span class="font-6">红十字会上链信息：</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠姓名：</span>
+                <span>${d.name}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠内容：</span>
+                <span>${d.content}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠说明：</span>
+                <span>${c.description}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠地址：</span>
+                <span>${d.address}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>捐赠机构：</span>
+                <span>${d.donor}</span>
+                </div>
+                <div class="select-welfare-info">
+                    <span>受益人：</span>
+                <span>${d.get}</span>
+                </div>
+                <div class="select-welfare-block"style="margin-top: 40px;">
+                    <span>区块高度：</span>
+                <span>${c.height}</span>
+                </div>
+                <div class="select-welfare-block">
+                    <span>区块哈希：</span>
+                <span>${c.blockHash}</span>
+                </div>
+                <div class="select-welfare-block">
+                    <span>事务哈希：</span>
+                <span>${c.hash}</span>
+                </div>
+<div class="text-center">
+<a href="./home.html"><button class="box-but" id="but-select-welfare">信息无误</button></a>
+</div>
+`
+
+            })
             .then(t => infos.push(t))
             .then(() => {
                 const $switch = function(index){
                     $('.select-welfare-item').removeClass('mark')
                     $('.item-' + index).addClass('mark')
                     $('.select-welfare-kv').html(infos[index])
+                    $('title').text(index === 0 ? '公益信息查询' : '查询信息-红十字会')
                 }
 
                 const items = [0, 1]

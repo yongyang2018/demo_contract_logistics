@@ -25,16 +25,19 @@
                 </div>
                 <div class="select-sender-kv">
                     <div class="select-sender-info">
+                        <span>红十字会上链信息：</span>
+                    </div>
+                    <div class="select-sender-info">
                         <span>捐赠区块高度：</span>
                         <span id="height"></span>
                     </div>
                     <div class="select-sender-info">
                         <span>捐赠区块哈希：</span>
-                        <span id="blockHash"></span>
+                        <span id="blockHash" style="font-size: 0.7em; position: relative; display: block; top: .5em"></span>
                     </div>
                     <div class="select-sender-info">
                         <span>捐赠事务哈希：</span>
-                        <span id="txHash"></span>
+                        <span id="txHash" style="font-size: 0.7em; position: relative; display: block; top: .5em"></span>
                     </div>
 
 
@@ -86,7 +89,7 @@
             $api.post('/api/welfare/confirm', {
                 description: $('#confirm-description').text()
             })
-                .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/home.html`))
+                .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/beneficiary-select.html`))
         }
 
         const refresh = () => $api.getDonor().then(d => {
@@ -115,6 +118,7 @@
                 bind()
             }
         })
+        .catch(() => null)
 
         setInterval(refresh, 1000)
     }

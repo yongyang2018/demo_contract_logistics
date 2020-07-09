@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>查询供应商信息</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/api.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/financial/header.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/financial/select.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/financial/select-firm.css"/>
+</head>
+<body>
+<div id="header"></div>
+
+<div id="" class="wid-1200">
+    <div class="">
+        <div class="outer">
+            <div class="box-frame">
+                <div class="select-welfare-title">
+                    查询信息-供应商信息
+                </div>
+                <div class="select-welfare-menu">
+                    <div class="select-welfare-item mark item-0">1</div>
+                    <div class="select-welfare-mid"></div>
+                    <div class="select-welfare-item item-1">2</div>
+                </div>
+                <div class="select-welfare-kv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#header").load("header.html")
+    window.onload = function () {
+        const infos = []
+        const context = {}
+        $api.get('/api/financial/supplier')
+            .then(s => {
+                return $api.getBlockHashByHeight(s.height)
+                    .then(hash => {
+                        s.blockHash = hash
+                        context.s = s
+                        return s
+                    })
+            })
+            .then(s => `<div class="logistics-item">
+                        <span style="font-weight: 600">供应商上链信息：</span>
+                    </div>
+                    <div class="select-welfare-info">
+                        <span>企业名称：</span>
+                        <span>${s.supplierName}</span>
+                    </div>
+                  <div class="select-welfare-info">
+                        <span>法人姓名：</span>
+                        <span>${s.legalName}</span>
+                    </div>
+                  <div class="select-welfare-info">
+                        <span>法人证件：</span>
+                        <span>${s.legalId}</span>
+                    </div>
+                    <div class="select-welfare-info">
+                        <span>融资金额：</span>
+                        <span>${s.amount}</span>
+                    </div>
+                    <div class="select-welfare-info">
+                        <span>合同编号：</span>
+                        <span>${s.number}</span>
+                    </div>
+                    <div class="select-welfare-block" style="margin-top: 40px;">
+                        <span>区块高度：</span>
+                        <span>${s.height}</span>
+                    </div>
+
+                    <div class="select-welfare-block">
+                        <span>事务哈希：</span>
+                        <span>${s.hash}</span>
+                    </div>
+                    <div class="select-welfare-block">
+                        <span>上链时间：</span>
+                        <span>${new Date(s.timestamp * 1000).$format('yyyy-MM-dd hh:mm:ss')}</span>
+                    </div>
+                </div>`)
+            .then(s => infos.push(s))
+            .then(() => $api.get('/api/financial/confirm'))
+            .then(c => $api.getBlockHashByHeight(c.height).then(h => {
+                c.blockHash = h
+                return c
+            }))
+            .then(c => {const s = context.s
+                return `							<div class="select-welfare-block">
+								<span class="font-6" style="font-weight: 600">核心企业认证上链信息：</span>
+							</div>
+							<div class="select-welfare-block">
+								<span>融资金额：</span>
+								<span>${s.amount}</span>
+							</div>
+							<div class="select-welfare-block">
+								<span>合同编号：</span>
+								<span>${s.number}</span>
+							</div>
+							<div class="select-welfare-block">
+								<span>上链时间：</span>
+								<span>${new Date(s.timestamp * 1000).$format('yyyy-MM-dd hh:mm:ss')}</span>
+							</div>
+							<div class="select-welfare-block">
+								<span>区块高度：</span>
+								<span>${c.height}</span>
+							</div>
+
+							<div class="select-welfare-block">
+								<span>事务哈希：</span>
+								<span>${c.hash}</span>
+							</div>
+							<div class="select-welfare-block">
+								<span>区块哈希：</span>
+								<span>${c.blockHash}</span>
+							</div>
+
+						</div>
+
+						<div class="wrap">
+							<div class="line-div"></div>
+							<div class="line-div2"></div>
+							<div class="line-div3"></div>
+							<div class="line-div4"></div>
+							<span style="font-size: 28px;">核心企业认证材料</span>
+						</div>
+
+
+						<div class="text-center">
+							<a href="./home.html"><button class="box-but" id="but-select-welfare">信息无误</button></a>
+						</div>`}
+            )
+            .then(s => infos.push(s))
+            .then(() => {
+                const $switch = function (i) {
+                    $('.select-welfare-kv').html(infos[i])
+                    $('.select-welfare-item').removeClass('mark')
+                    $('.item-' + i).addClass('mark')
+                    $('.select-welfare-title').text(i === 0 ? '查询信息-供应商信息' : '查询信息-核心企业认证信息')
+                }
+
+                const els = [0, 1]
+                els.forEach(i => {
+                    $('.item-' + i).on('click', () => $switch(i))
+                })
+
+                $switch(0)
+            })
+    }
+</script>
+</body>
+</html>

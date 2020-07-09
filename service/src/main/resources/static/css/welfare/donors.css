@@ -122,3 +122,7 @@ input[type="checkbox"]:checked::before {
 	font-weight: bold;
 
 }
+
+.font-6{
+	font-weight: 600;
+}

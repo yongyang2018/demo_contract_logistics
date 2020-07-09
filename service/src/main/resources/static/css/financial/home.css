@@ -1,0 +1,91 @@
+*{padding: 0;margin: 0;}
+li{list-style:none}
+a{text-decoration:none;color: #333333;}
+html,body {
+	height: 100%;
+	width: 100%;
+}
+body{
+	background-image: url(../../img/financial-beijing.jpg);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+.home-box{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.section-ui{
+	display: flex;
+	align-items: center;
+	height: 490px;
+	margin: 120px auto 80px;
+}
+.li-div-title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.li-div-title>img{
+	width: 240px;
+	height: 240px;
+	margin-bottom: 20px;
+}
+.li-div-title>a:hover{
+	background-color: #E1E1E1;
+}
+
+li {
+	margin: 0px 50px;
+	list-style: none;
+	width:300px;
+	height:490px;
+	background-color: #ffffff;
+	border-radius:10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0px 4px 8px 1px rgba(4,0,0,0.25);
+}
+	
+li:first-child{
+	margin: 0px 50px 0 0;
+}
+li:last-child{
+	margin: 0px 0 0 50px;
+}
+	
+.item-title{
+	font-size: 40px;
+	height: 80px;
+	line-height: 80px;
+	width: 180px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.paompt{
+	width: 1100px;
+	height: 200px;
+	font-size: 20px;
+	background-color: rgba(255,255,255,1);
+	color:#333333;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+	border-radius: 10px;
+}
+.paompt-item{
+	display: flex;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.paompt-item>span:first-child{
+	width: 200px;
+}

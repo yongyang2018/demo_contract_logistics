@@ -17,8 +17,8 @@
     <div class="">
         <div class="outer">
             <div class="box-frame">
-                <div class="register-title">
-                    请认真填写以下表格内容，以便数据真实可靠
+                <div class="register-title font-6">
+                    捐赠人上链信息填写
                 </div>
                 <div class="register-kv">
                     <div class="register-item">
@@ -103,7 +103,7 @@
 
 
         $api.post('/api/welfare/donor', o)
-            .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/home.html`))
+            .then(h => window.open(`success.html?text=${h[0]}&redirect=/welfare/cross.html`))
     }
 
 

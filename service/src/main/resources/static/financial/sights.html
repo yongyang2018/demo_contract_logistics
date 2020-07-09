@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>景点</title>
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/integral/header.css" />
+		<link rel="stylesheet" type="text/css" href="../css/integral/hotel.css" />
+	</head>
+	<body>
+		<div id="header"></div>
+
+		<div class="wid-1200">
+			<div class="">
+				<div class="outer">
+					<div class="box-frame">
+						<div class="hotel-title">
+							请认真填写以下数据，确保能准确上链
+						</div>
+						<div class="hotel-kv">
+							<div class="hotel-item">
+								<span class="">景点名称</span>
+								<input type="text" id="name" required="required" value=""/>
+							</div>
+							
+							<div class="hotel-item">
+								<span class="">活动名称</span>
+								<input type="text" id="activity" required="required" value=""/>
+							</div>
+							<div class="hotel-item">
+								<span class="">活动时间</span>
+								<input type="donor" id="time" required="required" value=""/>
+							</div>
+							<div class="hotel-item">
+								<span class="">消费积分</span>
+								<input type="text" id="fraction" required="required" value=""/>
+							</div>
+	
+						</div>
+						<div class="text-center">
+							<button class="box-but" onclick="confirm()">存证上链</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$("#header").load("header.html");
+		
+		function confirm(){
+			
+			var name = document.getElementById("name").value.replace(/(^\s*)|(\s*$)/g, '');//景点
+			var activity = document.getElementById("activity").value.replace(/(^\s*)|(\s*$)/g, '');//活动名称
+			var time = document.getElementById("time").value.replace(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/, '');//时间
+			var fraction = document.getElementById("fraction").value.replace(/(^\s*)|(\s*$)/g, '');//消费积分
+			
+			if(name ==""|| name == undefined || name == null){
+				alert("请输入景点名称")
+				return;
+			}
+			if (activity ==""||activity == undefined || activity == null) {
+				alert("请输入活动名称")
+				return;
+			}
+			
+			if (time ==""||time == undefined || time == null) {
+				alert("请输入活动时间")
+				return;
+			}
+			if (fraction ==""||fraction == undefined || fraction == null) {
+				alert("请输入消费积分")
+				return;
+			}
+			
+
+			window.location.href="success.html";
+		}
+		
+
+				
+		</script>
+		
+	</body>
+</html>

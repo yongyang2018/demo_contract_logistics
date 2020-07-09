@@ -25,11 +25,19 @@ public class WASMContractsManager {
 
     @PostConstruct
     public void init() {
-            long startNonce =
+        if(wasmContracts.values().isEmpty() ||
+                wasmContracts
+                        .values()
+                        .stream()
+                        .allMatch(x -> x.getAddress() != null && !x.getAddress().isEmpty())
+        ){
+            return;
+        }
+        long startNonce =
                 httpUtil.getLatestNonce(expressConfig.getAddress().toHex())
-                + 1;
+                        + 1;
         for (WASMContract contract : wasmContracts.values()) {
-            if(contract.getAddress() != null && !contract.getAddress().isEmpty()){
+            if (contract.getAddress() != null && !contract.getAddress().isEmpty()) {
                 continue;
             }
             HexBytes address = deploy(startNonce, contract.getSrc());
