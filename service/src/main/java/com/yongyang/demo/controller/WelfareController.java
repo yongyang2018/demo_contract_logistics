@@ -25,6 +25,7 @@ public class WelfareController {
     private final WASMContracts wasmContracts;
     private final ExpressConfig expressConfig;
 
+    // 这里返回公益合约的地址
     public String getContractAddress() {
         String ret = wasmContracts.get("welfare").getAddress();
         if (ret == null || ret.isEmpty())
@@ -32,6 +33,8 @@ public class WelfareController {
         return ret;
     }
 
+    // 这是构造事务的公共方法，根据不同的共识在事务中填写区块链相关的参数
+    // 这里选择的共识机制是 POA
     private Transaction createTransaction() {
         return new Transaction(
                 PoAConstants.TRANSACTION_VERSION,
@@ -46,6 +49,7 @@ public class WelfareController {
         );
     }
 
+    // 在链上查询捐赠人是否已经被红十字会确认
     @GetMapping("/confirm")
     public Confirm getConfirm() {
         String resp = httpUtil.get(
@@ -57,6 +61,7 @@ public class WelfareController {
         return RLPCodec.decode(HexBytes.decode(resp), Confirm.class);
     }
 
+    // 当红十字会在页面上点击确认后，构造确认事务发送到链上
     @PostMapping(value = "/confirm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String createDonor(@RequestBody Confirm confirm) {
         Transaction tx = createTransaction();
@@ -65,6 +70,7 @@ public class WelfareController {
         return httpUtil.sendTransaction(tx);
     }
 
+    // 查询捐赠人填写的信息
     @GetMapping("/donor")
     public Donor getDonor() {
         String resp = httpUtil.get(
@@ -76,6 +82,7 @@ public class WelfareController {
         return RLPCodec.decode(HexBytes.decode(resp), Donor.class);
     }
 
+    // 当捐赠人提交表单后，构造事务调用合约，将捐赠人的表单保存到链上
     @PostMapping(value = "/donor", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String createDonor(@RequestBody Donor donor) {
        Transaction tx = createTransaction();
@@ -84,6 +91,7 @@ public class WelfareController {
        return httpUtil.sendTransaction(tx);
     }
 
+    // 重置所有状态
     @PostMapping(value = "/reset", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String reset() {
         Transaction tx = createTransaction();

@@ -42,6 +42,9 @@ public class FinancialController {
         private HexBytes hash;
     }
 
+
+    // 这是构造事务的公共方法，根据不同的共识在事务中填写区块链相关的参数
+    // 这里选择的共识机制是 POA
     private Transaction createTransaction() {
         return new Transaction(
                 PoAConstants.TRANSACTION_VERSION,
@@ -56,6 +59,7 @@ public class FinancialController {
         );
     }
 
+    // 在链上查询供应商的信息
     @GetMapping("/supplier")
     public Supplier getSupplier() {
         String resp = httpUtil.get(
@@ -72,6 +76,7 @@ public class FinancialController {
         tx.setSignature(HexBytes.fromBytes(sig));
     }
 
+    // 当供应商提交表单后，构造事务调用合约，将供应商的表单信息保存到链上
     @PostMapping(value = "/supplier", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String saveSupplier(@RequestBody Supplier supplier) {
         Transaction t = createTransaction();
@@ -80,6 +85,7 @@ public class FinancialController {
         return httpUtil.sendTransaction(t);
     }
 
+    // 当核心企业在核心企业页面上点击确认后，构造确认事务发送到链上，完成确认
     @PostMapping(value = "/confirm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String saveConfirm(@RequestBody Confirm c){
         Transaction t = createTransaction();
@@ -96,6 +102,7 @@ public class FinancialController {
         return httpUtil.sendTransaction(t);
     }
 
+    // 查看供应商的表单是否已经被核心企业认证
     @GetMapping(value = "/confirm")
     public Confirm getConfirm(){
         String resp = httpUtil.get(
